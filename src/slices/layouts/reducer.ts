@@ -13,6 +13,20 @@ import {
 	LAYOUT_TOPBAR_THEME_TYPES,
 } from 'Common/constants/layout';
 
+const detectUserTheme = (): 'dark' | 'light' => {
+	if (
+		window.matchMedia &&
+		window.matchMedia('(prefers-color-scheme: dark)').matches
+	) {
+		return 'dark';
+	} else {
+		return 'light';
+	}
+};
+
+const themeMode = localStorage.getItem('themeMode');
+const userTheme = themeMode ?? detectUserTheme();
+
 export interface LayoutState {
 	layoutType: LAYOUT_TYPES.HORIZONTAL | LAYOUT_TYPES.VERTICAL;
 	layoutSemiDarkType: LAYOUT_SEMI_DARK.LIGHT | LAYOUT_SEMI_DARK.DARK;
@@ -46,13 +60,22 @@ export const initialState: LayoutState = {
 	layoutType: LAYOUT_TYPES.VERTICAL,
 	layoutSemiDarkType: LAYOUT_SEMI_DARK.LIGHT,
 	layoutSkintype: LAYOUT_SKIN.DEFAULT,
-	layoutModeType: LAYOUT_MODE_TYPES.LIGHTMODE,
+	layoutModeType:
+		userTheme === 'dark'
+			? LAYOUT_MODE_TYPES.DARKMODE
+			: LAYOUT_MODE_TYPES.LIGHTMODE,
 	layoutDirectionType: LAYOUT_DIRECTION.LTR,
 	layoutContentWidthType: LAYOUT_CONTENT_WIDTH.BOXED,
 	layoutSidebarSizeType: LEFT_SIDEBAR_SIZE_TYPES.DEFAULT,
 	layoutNavigationType: LEFT_NAVIGATION_TYPES.STICKY,
-	layoutSidebarColorType: LEFT_SIDEBAR_COLOR_TYPES.LIGHT,
-	layoutTopbarColorType: LAYOUT_TOPBAR_THEME_TYPES.LIGHT,
+	layoutSidebarColorType:
+		userTheme === 'dark'
+			? LEFT_SIDEBAR_COLOR_TYPES.DARK
+			: LEFT_SIDEBAR_COLOR_TYPES.LIGHT,
+	layoutTopbarColorType:
+		userTheme === 'dark'
+			? LAYOUT_TOPBAR_THEME_TYPES.DARK
+			: LAYOUT_TOPBAR_THEME_TYPES.LIGHT,
 };
 
 const LayoutSlice = createSlice({

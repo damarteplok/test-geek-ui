@@ -1,24 +1,26 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
+import LayoutReducer from './layouts/reducer';
+import LoginReducer from './auth/login/reducer';
+import RegisterReducer from './auth/register/reducer';
+import ProfileReducer from './auth/profile/reducer';
+import AuthProtectedReducer from './auth/authprotected/reducer';
+import UserReducer from './users/reducer';
 
-// Front
-import LayoutReducer from "./layouts/reducer";
-
-// login
-import LoginReducer from "./auth/login/reducer";
-
-// register
-import RegisterReducer from "./auth/register/reducer";
-
-// userProfile
-import ProfileReducer from "./auth/profile/reducer";
-
-const rootReducer = combineReducers({
-    Layout: LayoutReducer,
-    Login: LoginReducer,
-    Register: RegisterReducer,
-    Profile: ProfileReducer
+const appReducer = combineReducers({
+	Layout: LayoutReducer,
+	Login: LoginReducer,
+	Register: RegisterReducer,
+	Profile: ProfileReducer,
+	AuthProtected: AuthProtectedReducer,
+	User: UserReducer,
 });
 
+const rootReducer = (state: any, action: any) => {
+	if (action.type === 'RESET_STORE') {
+		state = undefined;
+	}
+	return appReducer(state, action);
+};
 
 export type RootState = ReturnType<typeof rootReducer>;
 
